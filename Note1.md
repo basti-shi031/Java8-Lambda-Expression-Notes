@@ -90,3 +90,24 @@ Thread t = new Thread{()->{Log.i("Tag","Message");}};
 ```
 注意第二个线程里的lambda表达式，并不需要将其转成Runnable,因为Java能够根据上下文自动推断，
 一个Thread的构造函数接受一个Runnable参数，且传入的Lambda表达式正好符合其run()函数，所以java编译器可以推断为Runnable。
+
+### 集合批处理操作
+```java
+for (Object o:list ) {
+  Log.i("TAG",o);
+}
+```
+可转换为
+```java
+list.forEach(o->{Log.i("TAG",o)};)
+```
+
+### 流
+一个流通常以一个集合类实例为其数据源，然后在其上定义各种操作。流的API设计使用了管道模式，对流的一次操作为返回另一个流，从而不同的操作可以串起来。
+```java
+List<Shape> shapes = ...;
+shape.stream()
+  .filter(s->s.getColor() == BLUE)
+  .forEach(s->s.setColor(RED));
+```
+首先调用stream()方法，以集合类对象shapes里面的元素为数据源，生成一个流，然后在这个流上调用filter方法，跳出蓝色的，返回一个流，最后调用forEach方法将这些蓝色的shape换成红色。
